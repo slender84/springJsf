@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>model</title>
+    </h:head>
+    <h:body>
+        
+        <h:form id="formCombo">
+            
+            <p:growl/>
+            
+            <h:panelGrid columns="2" cellpadding="6">
+                
+                <p:outputLabel value="Brand"/>
+                <p:selectOneMenu id="c1" value="#{modelController.brandString}" required="true" requiredMessage="you must select one brand">
+                    <p:ajax event="change" listener="#{modelController.changeBrand}" update=":formInput :formTable" oncomplete="PF('tableWidget').filter();" />
+                    
+                    <f:selectItem itemLabel="select one brand" noSelectionOption="true"/>
+                    <f:selectItems var="brand" value="#{modelController.listBrands}" itemLabel="#{brand.name}" itemValue="#{brand.name}"/>
+                </p:selectOneMenu>
+                
+                
+            </h:panelGrid>
+            
+            
+        </h:form>
+        
+        
+        <h:form id="formInput">
+            
+            <h:panelGrid columns="2" cellpadding="6">
+                
+                <p:outputLabel value="name" for="nameIn"/>
+                <p:inputText id="nameIn" value="#{modelController.modelName}" required="true" requiredMessage="Name field is empty"/>
+                
+                <p:outputLabel value="fuel" for="fuelIn"/>
+                <p:inputText id="fuelIn" value="#{modelController.modelFuel}" required="true" requiredMessage="Fuel field is empty"/>
+                
+                <p:outputLabel value="year" for="yearIn"/>
+                <p:inputText id="yearIn" value="#{modelController.modelYear}" required="true" requiredMessage="year field is empty">
+                    <f:validateLongRange minimum="1" maximum="3000"/>
+                </p:inputText>
+                <p:commandButton value="Save model" action="#{modelController.createModel}" update=":formInput :formCombo :formTable" oncomplete="PF('tableWidget').filter();" />
+                                 
+            </h:panelGrid>   
+        </h:form>
+            
+            <h:form id="formTable">
+                                 
+                <p:dataTable id="tableModel" value="#{modelController.listModels}" paginator="true" paginatorPosition="bottom"
+                             var="model" rowKey="#{model.name}" widgetVar="tableWidget" rendered="#{modelController.checkBrand}">
+                
+                    <p:column headerText="name" filterBy="#{model.name}">
+                    
+                        <h:outputText value="#{model.name}"/>
+                    </p:column>
+                    
+                    <p:column headerText="year" sortBy="#{model.year}">
+                        <h:outputText value="#{model.year}"/>
+                    </p:column>
+                    
+                    <p:column headerText="fuel" filterBy="#{model.fuel}" sortBy="#{model.fuel}">
+                        <h:outputText value="#{model.fuel}"/>
+                        
+                    </p:column>
+                    
+                    <p:column headerText="delete" style="text-align: center">
+                        
+                        <p:commandButton  value="delete" action="#{modelController.deleteModel}" update=":formTable :formCombo" oncomplete="PF('tableWidget').filter();">
+                            <f:setPropertyActionListener value="#{model}" target="#{modelController.selectedModel}"/>
+                        </p:commandButton>
+                    </p:column>
+                    
+                    
+                    
+                </p:dataTable>
+                 
+            
+            
+            
+        </h:form>
+        
+    </h:body>
+</html>
+

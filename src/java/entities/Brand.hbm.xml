@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 14-jul-2015 18:23:22 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="test" name="entities.Brand" optimistic-lock="version" table="brand">
+    <id name="name" type="string">
+      <column length="100" name="name"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="country" type="string">
+      <column length="100" name="country"/>
+    </property>
+    <set cascade="delete" fetch="select" inverse="true" lazy="true" name="models" table="model">
+      <key>
+        <column length="100" name="brand" not-null="true"/>
+      </key>
+      <one-to-many class="entities.Model"/>
+    </set>
+  </class>
+</hibernate-mapping>

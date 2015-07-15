@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>brands</title>
+    </h:head>
+    <h:body>
+        
+        <h:form id="formBrands">
+            <p:growl/>
+            <h:panelGrid columns="2" cellpadding="6">
+                
+                <p:outputLabel value="Name" for="NameIn"/>
+                <p:inputText value="#{brandController.name}" required="true" requiredMessage="the input field name is empty" id="NameIn"/>
+                <p:outputLabel value="Country" for="CountryIn"/>
+                <p:inputText value="#{brandController.country}" required="true" requiredMessage="the input field country is empty" id="CountryIn"/>
+
+                <p:commandButton value="save" action="#{brandController.save}" update=":formBrands :formList" oncomplete="PF('tableWidget').filter();"/>
+                
+            </h:panelGrid>
+            
+        </h:form>
+        
+        <h:form id="formList">
+            
+            <p:dataTable id="brandTable" value="#{brandController.listBrands}" var="brand" rowKey="#{brand.name}" rows="10"
+                         emptyMessage="there is no brands" paginator="true" paginatorPosition="bottom"
+                         widgetVar="tableWidget" selection="#{brandController.selectedBrands}">
+                <p:column headerText="name" filterBy="#{brand.name}" filterMatchMode="contains">
+                    
+                    <h:outputText value="#{brand.name}"/>
+                    
+                </p:column>
+                
+                <p:column headerText="country" filterBy="#{brand.country}" filterMatchMode="contains">
+                    
+                    <h:outputText value="#{brand.country}"/>
+                    
+                </p:column>
+            
+                <p:column headerText="delete" selectionMode="multiple" style="text-align: center;"/>
+                    
+                    
+                <f:facet name="footer">
+                    
+                    <p:commandButton  value="delete" action="#{brandController.deleteBrand}" update=":formList :formBrands" oncomplete="PF('tableWidget').filter();"/>
+                    
+                    
+                </f:facet> 
+               
+            
+            </p:dataTable> 
+            
+            
+            
+            
+        </h:form>
+        
+        
+    </h:body>
+</html>
+
